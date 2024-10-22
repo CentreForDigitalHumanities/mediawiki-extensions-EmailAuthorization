@@ -69,6 +69,10 @@ class EmailAuthorizationStore {
 	 */
 	public function isEmailAuthorized( ?string $email ): bool {
 		$dbr = MediaWikiServices::getInstance()->getDBLoadBalancer()->getConnection( DB_REPLICA );
+        if ( $email === null ) {
+            return false;
+        }
+        $email = mb_strtolower( htmlspecialchars( trim( $email ), ENT_QUOTES ) );
 		$row = $dbr->selectRow(
 			'emailauth',
 			[
